@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: lumiere-pos-api
+    runtime: python
+    plan: starter            # persistent disks aren't available on the free plan
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 app.py
+    healthCheckPath: /api/health
+    disk:
+      name: lumiere-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: LUMIERE_DB_PATH
+        value: /var/data/lumiere.db
+      - key: LUMIERE_ADMIN_PASSWORD
+        sync: false          # you type this in the Render dashboard
+      - key: LUMIERE_ALLOWED_ORIGIN
+        sync: false          # your front-end origin, e.g. https://big-dario.github.io
